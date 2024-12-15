@@ -52,17 +52,20 @@ class RoleResource extends Resource implements HasShieldPermissions
                         Forms\Components\Section::make()
                             ->schema([
                                 Forms\Components\TextInput::make('name')
-                                    ->label(__('filament-shield::filament-shield.field.name'))
+                                    ->label('Deskripsi')
                                     ->unique(ignoreRecord: true)
                                     ->required()
                                     ->maxLength(255),
-
-                                Forms\Components\TextInput::make('guard_name')
-                                    ->label(__('filament-shield::filament-shield.field.guard_name'))
+                                Forms\Components\Select::make('guard_name')
+                                    ->label('Type')
                                     ->default(Utils::getFilamentAuthGuard())
-                                    ->nullable()
-                                    ->maxLength(255),
-
+                                    ->options([
+                                        'web' => 'WEB',
+                                        'api' => 'API'
+                                    ])
+                                    ->disableOptionWhen(function ($value) {
+                                        return Str::contains($value, 'api');
+                                    }),
                                 Forms\Components\Select::make(config('permission.column_names.team_foreign_key'))
                                     ->label(__('filament-shield::filament-shield.field.team'))
                                     ->placeholder(__('filament-shield::filament-shield.field.team.placeholder'))
@@ -77,7 +80,6 @@ class RoleResource extends Resource implements HasShieldPermissions
                                     ->label(__('filament-shield::filament-shield.field.select_all.name'))
                                     ->helperText(fn(): HtmlString => new HtmlString(__('filament-shield::filament-shield.field.select_all.message')))
                                     ->dehydrated(fn(bool $state): bool => $state),
-
                             ])
                             ->columns([
                                 'sm' => 2,
@@ -94,13 +96,14 @@ class RoleResource extends Resource implements HasShieldPermissions
             ->columns([
                 Tables\Columns\TextColumn::make('name')
                     ->weight('font-medium')
-                    ->label(__('filament-shield::filament-shield.column.name'))
+                    ->label('Deskripsi')
                     ->formatStateUsing(fn($state): string => Str::headline($state))
                     ->searchable(),
                 Tables\Columns\TextColumn::make('guard_name')
                     ->badge()
                     ->color('warning')
-                    ->label(__('filament-shield::filament-shield.column.guard_name')),
+                    ->label('Type')
+                    ->icon(fn($state) => $state === 'web' ? 'heroicon-o-globe-alt' : 'heroicon-o-fire'),
                 Tables\Columns\TextColumn::make('team.name')
                     ->default('Global')
                     ->badge()
@@ -113,21 +116,31 @@ class RoleResource extends Resource implements HasShieldPermissions
                     ->label(__('filament-shield::filament-shield.column.permissions'))
                     ->counts('permissions')
                     ->colors(['success']),
+                Tables\Columns\TextColumn::make('created_at')
+                    ->label('Dibuat')
+                    ->formatStateUsing(fn($state) => $state->diffForHumans())
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->label(__('filament-shield::filament-shield.column.updated_at'))
-                    ->formatStateUsing(fn($state) => $state->diffForHumans()),
+                    ->label('Dirubah')
+                    ->formatStateUsing(fn($state) => $state->diffForHumans())
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->label('Lihat'),
-                Tables\Actions\EditAction::make()
-                    ->label('Ubah'),
-                Tables\Actions\DeleteAction::make()
-                    ->label('Hapus'),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()
+                        ->label('Lihat'),
+                    Tables\Actions\EditAction::make()
+                        ->label('Ubah'),
+                    Tables\Actions\DeleteAction::make()
+                        ->label('Hapus'),
+                ]),
             ])
+            ->actionsColumnLabel('Aksi')
             ->bulkActions([
                 // Tables\Actions\DeleteBulkAction::make(),
             ]);

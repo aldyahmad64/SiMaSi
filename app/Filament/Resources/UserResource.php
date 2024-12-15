@@ -109,11 +109,13 @@ class UserResource extends Resource implements HasShieldPermissions
                     ->label('Email')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->label('Dibuat')
+                    ->formatStateUsing(fn($state) => $state->diffForHumans())
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->label('Dirubah')
+                    ->formatStateUsing(fn($state) => $state->diffForHumans())
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -121,13 +123,20 @@ class UserResource extends Resource implements HasShieldPermissions
                 //
             ])
             ->actions([
-                Tables\Actions\ViewAction::make()
-                    ->label('Lihat'),
-                Tables\Actions\EditAction::make()
-                    ->label('Ubah'),
-                Tables\Actions\DeleteAction::make()
-                    ->label('Hapus'),
+                Tables\Actions\ActionGroup::make([
+                    Tables\Actions\ViewAction::make()
+                        ->label('Lihat'),
+                    Tables\Actions\EditAction::make()
+                        ->label('Ubah'),
+                    Tables\Actions\DeleteAction::make()
+                        ->label('Hapus'),
+                    Tables\Actions\RestoreAction::make()
+                        ->label('Kembalikan'),
+                    Tables\Actions\ForceDeleteAction::make()
+                        ->label('Hapus Selamanya'),
+                ]),
             ])
+            ->actionsColumnLabel('Aksi')
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([
                     // Tables\Actions\DeleteBulkAction::make(),
