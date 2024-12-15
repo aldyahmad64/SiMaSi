@@ -55,6 +55,7 @@ class RoleResource extends Resource implements HasShieldPermissions
                                     ->label('Deskripsi')
                                     ->unique(ignoreRecord: true)
                                     ->required()
+                                    ->autocomplete(false)
                                     ->maxLength(255),
                                 Forms\Components\Select::make('guard_name')
                                     ->label('Type')
