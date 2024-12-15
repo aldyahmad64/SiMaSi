@@ -8,11 +8,12 @@ use Filament\Models\Contracts\HasAvatar;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable implements HasAvatar
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasFactory, Notifiable, HasRoles;
 
     /**
      * The attributes that are mass assignable.
@@ -51,6 +52,6 @@ class User extends Authenticatable implements HasAvatar
 
     public function getFilamentAvatarUrl(): ?string
     {
-        return $this->avatar_url ? \Illuminate\Support\Facades\Storage::url("$this->avatar_url") : null;
+        return $this->avatar_url ? \Illuminate\Support\Facades\Storage::url("$this->avatar_url") : url('/storage/avatars/default.png');
     }
 }

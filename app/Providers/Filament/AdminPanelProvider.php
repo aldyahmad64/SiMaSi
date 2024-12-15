@@ -12,6 +12,7 @@ use Filament\Http\Middleware\Authenticate;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Filament\Http\Middleware\AuthenticateSession;
+use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
@@ -72,9 +73,9 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->userMenuItems([
-                'profile' => \Filament\Navigation\MenuItem::make()
+                'profile' => MenuItem::make()
                     ->label(fn() => auth()->user()->name)
-                    ->url(fn(): string => \Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage::getUrl())
+                    ->url(fn(): string => EditProfilePage::getUrl())
                     ->icon('heroicon-m-user-circle'),
             ])
             ->plugins([
@@ -92,6 +93,7 @@ class AdminPanelProvider extends PanelProvider
                         directory: 'avatars', // image will be stored in 'storage/app/public/avatars
                         rules: 'mimes:jpeg,png|max:1024' //only accept jpeg and png files with a maximum size of 1MB
                     ),
+                FilamentShieldPlugin::make(),
             ]);
     }
 }
