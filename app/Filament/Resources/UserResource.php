@@ -70,6 +70,7 @@ class UserResource extends Resource implements HasShieldPermissions
                 Forms\Components\TextInput::make('password_confirmation')
                     ->label('Konfirmasi Password')
                     ->password()
+                    ->revealable()
                     ->required(fn(string $context): bool => $context === 'create')
                     ->live()
                     ->dehydrated(false)
