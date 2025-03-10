@@ -12,8 +12,8 @@ return new class extends Migration {
     {
         Schema::create('penduduks', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('kk')->index();
-            $table->bigInteger('nik')->unique();
+            $table->string('kk')->index();
+            $table->string('nik')->unique();
             $table->string('nama_lengkap');
             $table->enum('jenis_kelamin', ['L', 'P']); // 'L' atau 'P'
             $table->string('tempat_lahir');

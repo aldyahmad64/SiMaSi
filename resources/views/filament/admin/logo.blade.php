@@ -1,1 +1,1 @@
-<img height="50px" width="50px" src="/storage/img/web/logo.png" alt="Logo"><b>{{ env('APP_NAME') }}</b>
+<img height="50px" width="50px" src="/storage/img/web/logo.png" alt="Logo"><b>{{ env('APP_NAME', 'SiMaSi') }}</b>

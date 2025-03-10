@@ -10,10 +10,14 @@ class ListPenduduks extends ListRecords
 {
     protected static string $resource = PendudukResource::class;
 
+    protected static ?string $title = 'List Penduduk';
+
     protected function getHeaderActions(): array
     {
         return [
-            Actions\CreateAction::make(),
+            Actions\CreateAction::make()
+                ->label('Penduduk Baru')
+                ->createAnother(false),
         ];
     }
 }

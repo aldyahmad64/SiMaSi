@@ -18,4 +18,18 @@ class CreateUser extends CreateRecord
     {
         return static::getResource()::getUrl('index');
     }
+
+    public function getFormActions(): array
+    {
+        return [
+            \Filament\Actions\Action::make('save')
+                ->label('Simpan')
+                ->action(fn() => $this->create())
+                ->keyBindings(['command+s', 'ctrl+s']),
+            \Filament\Actions\Action::make('cancel')
+                ->label('Batal')
+                ->color('gray')
+                ->url(fn(): string => static::getResource()::getUrl('index'))
+        ];
+    }
 }
