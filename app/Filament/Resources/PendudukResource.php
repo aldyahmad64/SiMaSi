@@ -665,7 +665,7 @@ class PendudukResource extends Resource implements HasShieldPermissions
         return [
             'index' => Pages\ListPenduduks::route('/'),
             'create' => Pages\CreatePenduduk::route('/create'),
-            // 'view' => Pages\ViewPenduduks::route('/{record}'),
+            'view' => Pages\ViewPenduduks::route('/{record}'),
             'edit' => Pages\EditPenduduk::route('/{record}/edit'),
         ];
     }

@@ -14,6 +14,23 @@ class CreatePenduduk extends CreateRecord
 
     protected static ?string $title = 'Buat Data Penduduk';
 
+    protected function afterCreate(): void
+    {
+        $penduduk = $this->record;
+        \Filament\Notifications\Notification::make()
+            ->title('Penduduk')
+            ->body("Data baru ditambahkan dengan nomor NIK : {$penduduk->nik}")
+            ->success()
+            ->actions([
+                \Filament\Notifications\Actions\Action::make('view')
+                    ->label('Lihat Data')
+                    ->button()
+                    ->url(route('filament.admin.resources.penduduks.view', $penduduk))
+                    ->markAsRead(),
+            ])
+            ->sendToDatabase(\App\Models\User::role('operator')->get());
+    }
+
     protected function getRedirectUrl(): string
     {
         return static::getResource()::getUrl('index');
